@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Chaves - Multi Sistema</title>
     <style>
-        /* Estilos Base (Aplicados em todas as telas) */
+        /* Ajuste Extremo do BODY para garantir 100% da viewport */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
@@ -13,49 +13,65 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 10px; /* Reduzi o padding base para ganhar espaço */
+            margin: 0; 
+            padding: 0; /* Remove todo o padding do body */
             box-sizing: border-box;
         }
         
+        /* Ajuste do CARD para encaixar na tela */
         .card {
             background: white;
-            padding: 1rem; /* Reduzi o padding interno para ganhar espaço */
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            width: 100%;
+            padding: 0.8rem; /* Padding reduzido ao mínimo */
+            border-radius: 8px; /* Borda levemente menor */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Sombra mais suave */
+            width: 95%; /* Ocupa a maior parte da tela */
             max-width: 600px;
             text-align: center;
         }
 
-        h1 { color: #2563eb; margin-bottom: 0.5rem; font-size: 1.8rem; } /* Tamanho padrão */
-        p { color: #64748b; margin-bottom: 1rem; font-size: 1rem; } /* Tamanho padrão */
+        h1 { 
+            color: #2563eb; 
+            margin-bottom: 0.3rem; 
+            font-size: 1.4rem; /* Redução máxima do título */
+        }
+        p { 
+            color: #64748b; 
+            margin-bottom: 0.8rem; 
+            font-size: 0.85rem; /* Redução máxima da instrução */
+        }
         
         .control-group {
             display: flex;
-            gap: 10px;
+            gap: 5px; /* Reduzi o espaço entre os elementos */
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px; /* Reduzi a margem inferior */
+            margin-bottom: 10px; /* Redução de margem */
             flex-wrap: wrap;
         }
 
         select, input {
-            padding: 10px; /* Reduzi o padding */
-            border-radius: 8px;
+            padding: 8px; /* Redução do padding */
+            border-radius: 6px; 
             border: 1px solid #ccc;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             flex-grow: 1; 
-            min-width: 100px; 
+            min-width: 80px; 
+        }
+
+        /* Otimização do input de quantidade */
+        #qtd {
+            width: 50px !important; 
+            flex-grow: 0;
+            min-width: 50px;
         }
 
         button {
             background: #2563eb;
             color: white;
             border: none;
-            padding: 10px 20px; /* Reduzi o padding */
-            border-radius: 8px;
-            font-size: 0.95rem;
+            padding: 8px 15px; /* Redução do padding do botão */
+            border-radius: 6px;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
@@ -65,46 +81,27 @@
         
         .card > button {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 8px; /* Margem reduzida */
             background: #475569;
         }
 
         textarea {
             width: 100%;
-            height: 150px; /* **PRINCIPAL MUDANÇA: Reduzi drasticamente a altura** */
-            margin-top: 15px; /* Reduzi a margem superior */
-            padding: 8px; /* Reduzi o padding */
+            height: 100px; /* **ALTURA CRÍTICA: Reduzida para 100px** */
+            margin-top: 10px; /* Margem reduzida */
+            padding: 6px; 
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 6px;
             font-family: monospace;
-            font-size: 13px;
+            font-size: 12px; /* Fonte menor */
             resize: vertical;
             box-sizing: border-box;
         }
         .stats {
-            margin-top: 8px; /* Reduzi a margem superior */
-            font-size: 0.85rem;
+            margin-top: 6px; 
+            font-size: 0.8rem; /* Fonte menor */
             color: #16a34a;
             font-weight: 500;
-        }
-
-        /* Otimizações Específicas para Mobile (Telas com até 600px de largura) */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5rem; /* Reduz o tamanho do título */
-                margin-bottom: 0.3rem;
-            }
-            p {
-                font-size: 0.9rem; /* Reduz o tamanho da instrução */
-                margin-bottom: 0.8rem;
-            }
-
-            /* Força o input de quantidade a ser pequeno */
-            #qtd {
-                width: 60px !important; 
-                flex-grow: 0;
-                min-width: 60px;
-            }
         }
     </style>
 </head>
