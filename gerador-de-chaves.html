@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Chaves - Multi Sistema</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 { color: #2563eb; margin-bottom: 0.5rem; }
+        p { color: #64748b; margin-bottom: 2rem; }
+        
+        .control-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        select, input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover { background: #1d4ed8; }
+        textarea {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        .stats {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #16a34a;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Gerador de Licenças 🔑</h1>
+    <p>Selecione o sistema para gerar a chave correta.</p>
+    
+    <div class="control-group">
+        <select id="sistema-selector">
+            <option value="JANINA">Aula Pro (Janaina)</option>
+            <option value="GATOS">Plantão Pro (Gatos)</option>
+        </select>
+
+        <input type="number" id="qtd" value="50" min="1" max="1000" style="width: 80px;">
+        <button onclick="gerarLote()">Gerar Chaves</button>
+    </div>
+
+    <div id="status" class="stats"></div>
+    <textarea id="output" readonly placeholder="As chaves geradas aparecerão aqui..."></textarea>
+    <button onclick="copiar()" style="margin-top: 10px; background: #475569;">Copiar Lista</button>
+</div>
+
+<script>
+    const SEGREDO_GATOS = "PACOCA_POMPOM_PRETA_KEY_2025";
+    const SEGREDO_JANAINA = "SEMPRE_VOU_TE_AMAR_JANAINA_KEY_2025";
+
+    function gerarAssinatura(textoBase, segredo) {
+        let hash = 0;
+        const stringMista = textoBase + segredo;
+        
+        for (let i = 0; i < stringMista.length; i++) {
+            const char = stringMista.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0;
+        }
+        
+        const hex = Math.abs(hash).toString(16).toUpperCase().padStart(4, '0');
+        return hex.slice(-4); 
+    }
+
+    function gerarChaveUnica(segredo) {
+        const array = new Uint32Array(3);
+        window.crypto.getRandomValues(array);
+        let corpo = "";
+        
+        for(let i=0; i<3; i++) {
+            const parte = array[i].toString(16).toUpperCase().padStart(4, '0').slice(-4);
+            corpo += parte;
+        }
+        
+        const assinatura = gerarAssinatura(corpo, segredo);
+        return `${corpo.slice(0,4)}-${corpo.slice(4,8)}-${corpo.slice(8,12)}-${assinatura}`;
+    }
+
+    function gerarLote() {
+        const qtd = document.getElementById('qtd').value;
+        const output = document.getElementById('output');
+        const status = document.getElementById('status');
+        const sistema = document.getElementById('sistema-selector').value;
+        
+        const segredoAtual = (sistema === 'GATOS') ? SEGREDO_GATOS : SEGREDO_JANAINA;
+        
+        let lista = [];
+
+        for(let i=0; i<qtd; i++) {
+            lista.push(gerarChaveUnica(segredoAtual));
+        }
+
+        output.value = lista.join('\n');
+        status.textContent = `${qtd} chaves geradas para: ${sistema === 'GATOS' ? 'Plantão Pro' : 'Aula Pro'}`;
+    }
+
+    function copiar() {
+        const output = document.getElementById('output');
+        output.select();
+        document.execCommand('copy');
+        alert('Chaves copiadas para a área de transferência!');
+    }
+</script>
+
+</body>
+</html>
